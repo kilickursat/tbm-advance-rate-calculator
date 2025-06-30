@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, Dict, Any
 from enum import Enum
 
@@ -97,18 +97,24 @@ class TBMParameters(BaseModel):
         description="Ground temperature in Celsius"
     )
     
-    @validator('ucs')
-    def validate_ucs_for_rock(cls, v, values):
-        soil_type = values.get('soil_type')
-        if soil_type and 'rock' in soil_type and v is None:
-            raise ValueError('UCS is required for rock types')
+    @field_validator('ucs')
+    @classmethod
+    def validate_ucs_for_rock(cls, v, info):
+        # Access other field values through info.data
+        if hasattr(info, 'data') and info.data:
+            soil_type = info.data.get('soil_type')
+            if soil_type and 'rock' in soil_type and v is None:
+                raise ValueError('UCS is required for rock types')
         return v
     
-    @validator('rqd')
-    def validate_rqd_for_rock(cls, v, values):
-        soil_type = values.get('soil_type')
-        if soil_type and 'rock' in soil_type and v is None:
-            raise ValueError('RQD is required for rock types')
+    @field_validator('rqd')
+    @classmethod
+    def validate_rqd_for_rock(cls, v, info):
+        # Access other field values through info.data
+        if hasattr(info, 'data') and info.data:
+            soil_type = info.data.get('soil_type')
+            if soil_type and 'rock' in soil_type and v is None:
+                raise ValueError('RQD is required for rock types')
         return v
 
 class AdvanceRateResult(BaseModel):
