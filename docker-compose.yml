@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  tbm-calculator:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=false
+      - LOG_LEVEL=INFO
+      - SECRET_KEY=${SECRET_KEY:-change-this-in-production}
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - tbm-calculator
+    restart: unless-stopped
+
+volumes:
+  logs:
+    driver: local
+
+networks:
+  default:
+    driver: bridge
