@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBM Advance Rate Calculator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-shadow { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
+        .input-focus:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .result-card { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .risk-low { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .risk-medium { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .risk-high { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <header class="gradient-bg text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-cogs text-3xl"></i>
+                    <div>
+                        <h1 class="text-3xl font-bold">TBM Advance Rate Calculator</h1>
+                        <p class="text-blue-100">Professional tunnel boring machine performance prediction</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-blue-100">Version 1.0.0</p>
+                    <p class="text-xs text-blue-200">Production Ready</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-lg p-6 card-shadow">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-calculator text-blue-600 mr-3"></i>Calculation Parameters
+                    </h2>
+                    
+                    <form id="calculationForm" class="space-y-6">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-medium text-gray-700 mb-4 flex items-center">
+                                <i class="fas fa-industry text-green-600 mr-2"></i>TBM Specifications
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">TBM Diameter (m) *</label>
+                                    <input type="number" id="tbm_diameter" name="tbm_diameter" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" min="1" max="20" step="0.1" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">TBM Type *</label>
+                                    <select id="tbm_type" name="tbm_type" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" required>
+                                        <option value="">Select TBM Type</option>
+                                        <option value="epb">EPB (Earth Pressure Balance)</option>
+                                        <option value="slurry">Slurry TBM</option>
+                                        <option value="open">Open TBM</option>
+                                        <option value="mixshield">Mix Shield</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Cutterhead Power (kW) *</label>
+                                    <input type="number" id="cutterhead_power" name="cutterhead_power" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" min="100" max="10000" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Cutterhead Speed (RPM) *</label>
+                                    <input type="number" id="cutterhead_speed" name="cutterhead_speed" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" min="0.1" max="10" step="0.1" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-medium text-gray-700 mb-4 flex items-center">
+                                <i class="fas fa-mountain text-brown-600 mr-2"></i>Geological Parameters
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Soil/Rock Type *</label>
+                                    <select id="soil_type" name="soil_type" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" required>
+                                        <option value="">Select Soil/Rock Type</option>
+                                        <option value="clay">Clay</option>
+                                        <option value="sand">Sand</option>
+                                        <option value="silt">Silt</option>
+                                        <option value="gravel">Gravel</option>
+                                        <option value="rock_soft">Soft Rock</option>
+                                        <option value="rock_medium">Medium Rock</option>
+                                        <option value="rock_hard">Hard Rock</option>
+                                        <option value="mixed">Mixed Conditions</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Water Pressure (bar)</label>
+                                    <input type="number" id="water_pressure" name="water_pressure" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" min="0" max="10" step="0.1" value="0">
+                                </div>
+                                <div id="ucs_field" class="hidden">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">UCS (MPa) - Required for rock types</label>
+                                    <input type="number" id="ucs" name="ucs" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" min="0" max="300" step="0.1">
+                                </div>
+                                <div id="rqd_field" class="hidden">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">RQD (%) - Required for rock types</label>
+                                    <input type="number" id="rqd" name="rqd" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" min="0" max="100" step="1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-medium text-gray-700 mb-4 flex items-center">
+                                <i class="fas fa-cog text-purple-600 mr-2"></i>Operational Parameters
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Thrust Force (kN) *</label>
+                                    <input type="number" id="thrust_force" name="thrust_force" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" min="100" max="50000" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Chamber Pressure (bar)</label>
+                                    <input type="number" id="chamber_pressure" name="chamber_pressure" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" min="0" max="10" step="0.1" value="0">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Depth (m) *</label>
+                                    <input type="number" id="depth" name="depth" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" min="1" max="200" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Temperature (°C)</label>
+                                    <input type="number" id="temperature" name="temperature" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" min="-10" max="60" value="20">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-4">
+                            <button type="submit" id="calculateBtn" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition duration-300 flex items-center justify-center">
+                                <i class="fas fa-calculator mr-2"></i>Calculate Advance Rate
+                            </button>
+                            <button type="button" id="exampleBtn" class="bg-gray-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-700 transition duration-300 flex items-center justify-center">
+                                <i class="fas fa-clipboard-list mr-2"></i>Load Example
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-lg p-6 card-shadow">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-chart-line text-green-600 mr-3"></i>Results
+                    </h2>
+                    
+                    <div id="loadingState" class="hidden text-center py-8">
+                        <div class="animate-pulse">
+                            <i class="fas fa-cog fa-spin text-4xl text-blue-600 mb-4"></i>
+                            <p class="text-gray-600">Calculating...</p>
+                        </div>
+                    </div>
+
+                    <div id="resultsContainer" class="hidden space-y-4">
+                        <div class="result-card text-white p-4 rounded-lg">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold" id="advanceRate">--</div>
+                                <div class="text-sm opacity-90">mm/min</div>
+                                <div class="text-lg font-medium mt-2">Advance Rate</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="bg-blue-50 p-3 rounded-lg text-center">
+                                <div class="text-xl font-bold text-blue-600" id="dailyAdvance">--</div>
+                                <div class="text-xs text-blue-500">m/day</div>
+                            </div>
+                            <div class="bg-green-50 p-3 rounded-lg text-center">
+                                <div class="text-xl font-bold text-green-600" id="penetrationRate">--</div>
+                                <div class="text-xs text-green-500">mm/rev</div>
+                            </div>
+                            <div class="bg-purple-50 p-3 rounded-lg text-center">
+                                <div class="text-xl font-bold text-purple-600" id="specificEnergy">--</div>
+                                <div class="text-xs text-purple-500">kWh/m³</div>
+                            </div>
+                            <div class="bg-yellow-50 p-3 rounded-lg text-center">
+                                <div class="text-xl font-bold text-yellow-600" id="confidence">--</div>
+                                <div class="text-xs text-yellow-500">confidence</div>
+                            </div>
+                        </div>
+
+                        <div id="riskAssessment" class="p-4 rounded-lg">
+                            <h3 class="font-medium text-gray-800 mb-2 flex items-center">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>Risk Assessment
+                            </h3>
+                            <div id="riskContent"></div>
+                        </div>
+
+                        <div id="recommendations" class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="font-medium text-blue-800 mb-2 flex items-center">
+                                <i class="fas fa-lightbulb mr-2"></i>Recommendations
+                            </h3>
+                            <div id="recommendationsList"></div>
+                        </div>
+                    </div>
+
+                    <div id="errorState" class="hidden text-center py-8 text-red-600">
+                        <i class="fas fa-exclamation-circle text-4xl mb-4"></i>
+                        <p class="font-medium">Calculation Error</p>
+                        <p class="text-sm" id="errorMessage"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="exampleModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">Select Example Scenario</h3>
+                    <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="exampleList" class="space-y-3"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="gradient-bg text-white py-6 mt-16">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-blue-100">TBM Advance Rate Calculator - Professional Engineering Tool</p>
+            <p class="text-blue-200 text-sm mt-2">
+                <i class="fas fa-shield-alt mr-1"></i>Production Ready API | 
+                <i class="fas fa-code mr-1"></i>FastAPI Framework |
+                <i class="fas fa-github mr-1"></i>
+                <a href="https://github.com/kilickursat/tbm-advance-rate-calculator" class="hover:text-white">GitHub Repository</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
